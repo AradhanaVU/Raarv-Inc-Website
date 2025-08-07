@@ -76,6 +76,31 @@ export const LandingPage = (): JSX.Element => {
       title: "SAP S/4HANA Implementation",
       description: "Complete S/4HANA transformation services from ECC migration to new implementations. We cover all modules including FI, TRM, and specialized banking components.",
       features: ["ECC Migration", "New Implementation", "Module Configuration", "Post-Go-Live Support"]
+    },
+    "Help Desk Services": {
+      title: "24/7 Help Desk Support",
+      description: "Round-the-clock technical support for your SAP systems. Our experienced team provides immediate assistance and resolution for system issues.",
+      features: ["24/7 Support", "Incident Management", "User Training", "System Monitoring"]
+    },
+    "Staff Augmentation for AMS": {
+      title: "SAP Staff Augmentation",
+      description: "Extend your team with our skilled SAP professionals. We provide experienced consultants to supplement your internal capabilities.",
+      features: ["Skilled Consultants", "Flexible Engagement", "Knowledge Transfer", "Team Integration"]
+    },
+    "AMS Service Management": {
+      title: "Application Management Services",
+      description: "Comprehensive management of your SAP applications including maintenance, monitoring, and continuous improvement initiatives.",
+      features: ["System Maintenance", "Performance Monitoring", "Change Management", "Continuous Improvement"]
+    },
+    "Nearshore IT Services": {
+      title: "Nearshore SAP Services",
+      description: "Cost-effective SAP services delivered from our nearshore centers with cultural alignment and timezone compatibility.",
+      features: ["Cost Optimization", "Cultural Alignment", "Timezone Coverage", "Quality Delivery"]
+    },
+    "SAP Basis Services": {
+      title: "SAP Basis Administration",
+      description: "Complete SAP Basis services including system administration, performance tuning, and infrastructure management.",
+      features: ["System Administration", "Performance Tuning", "Infrastructure Management", "Security Management"]
     }
   };
 
@@ -114,7 +139,7 @@ export const LandingPage = (): JSX.Element => {
       <motion.div 
         initial="hidden"
         animate="visible"
-        className="bg-white overflow-hidden w-[1400px] relative"
+        className="bg-white overflow-hidden w-full max-w-[1200px] relative"
       >
         {/* Header */}
         <motion.header 
@@ -166,25 +191,25 @@ export const LandingPage = (): JSX.Element => {
         {/* Hero Section */}
         <motion.section 
           id="hero"
-          className="flex flex-row justify-between mt-[53px] px-[87px]"
+          className="flex flex-row justify-between mt-[40px] px-[60px]"
           style={{ y: heroY, opacity: heroOpacity }}
         >
           <motion.div 
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
-            className="flex flex-col gap-10 max-w-[844px]"
+            className="flex flex-col gap-8 max-w-[700px]"
           >
             <div className="flex flex-col gap-6">
               <motion.h1 
                 variants={fadeInUp}
-                className="font-['Inter',Helvetica] font-bold text-black text-[64px] tracking-[-1.28px]"
+                className="font-['Inter',Helvetica] font-bold text-black text-[48px] lg:text-[64px] tracking-[-1.28px]"
               >
                 Raarv Inc
               </motion.h1>
               <motion.p 
                 variants={fadeInUp}
-                className="font-['Inter',Helvetica] font-normal text-black text-2xl leading-9 mt-[45px]"
+                className="font-['Inter',Helvetica] font-normal text-black text-lg lg:text-xl leading-relaxed mt-[30px]"
               >
                 We&apos;re a dedicated boutique SAP consulting firm specializing
                 in SAP and Fioneer financial services and SAP AMS. With 20+
@@ -212,7 +237,7 @@ export const LandingPage = (): JSX.Element => {
             animate={{ opacity: 1, scale: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             whileHover={{ scale: 1.02 }}
-            className="w-[508px] h-[517px] object-cover"
+            className="w-[400px] lg:w-[500px] h-[400px] lg:h-[500px] object-cover"
             alt="Raarv Consulting"
             src="/figmaAssets/image-5.png"
           />
@@ -225,18 +250,18 @@ export const LandingPage = (): JSX.Element => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={staggerContainer}
-          className="mt-[200px] px-[69px] relative"
+          className="mt-[120px] px-[60px] relative"
         >
           <motion.h2 
             variants={fadeInUp}
-            className="font-['Inter',Helvetica] font-semibold text-black text-5xl tracking-[-0.96px]"
+            className="font-['Inter',Helvetica] font-semibold text-black text-3xl lg:text-4xl tracking-[-0.96px]"
           >
             SAP Services
           </motion.h2>
 
           <motion.div 
             variants={staggerContainer}
-            className="flex flex-row gap-8 mt-[48px] ml-[18px]"
+            className="flex flex-col lg:flex-row gap-8 mt-[40px] ml-0 lg:ml-[18px]"
           >
             {/* Core Banking Column */}
             <motion.div 
@@ -244,7 +269,7 @@ export const LandingPage = (): JSX.Element => {
               whileHover={{ y: -5 }}
               onHoverStart={() => setHoveredService('SAP Core Banking')}
               onHoverEnd={() => setHoveredService(null)}
-              className="flex flex-col w-[393px] p-4 rounded-lg hover:shadow-lg transition-shadow cursor-pointer relative"
+              className="flex flex-col w-full lg:w-[350px] p-4 rounded-lg hover:shadow-lg transition-shadow cursor-pointer relative"
             >
               <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
                 SAP Core Banking
@@ -259,7 +284,7 @@ export const LandingPage = (): JSX.Element => {
             {/* Middle Column */}
             <motion.div 
               variants={fadeInUp}
-              className="flex flex-col w-[407px] gap-[93px]"
+              className="flex flex-col w-full lg:w-[350px] gap-12 lg:gap-[80px]"
             >
               <motion.div 
                 whileHover={{ x: 10 }} 
@@ -299,7 +324,7 @@ export const LandingPage = (): JSX.Element => {
               whileHover={{ y: -5 }}
               onHoverStart={() => setHoveredService('SAP S/4HANA')}
               onHoverEnd={() => setHoveredService(null)}
-              className="flex flex-col w-[393px] p-4 rounded-lg hover:shadow-lg transition-shadow cursor-pointer relative"
+              className="flex flex-col w-full lg:w-[350px] p-4 rounded-lg hover:shadow-lg transition-shadow cursor-pointer relative"
             >
               <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
                 SAP S/4HANA
@@ -354,38 +379,77 @@ export const LandingPage = (): JSX.Element => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="mt-[100px] px-[88px] flex justify-between"
+          className="mt-[80px] px-[60px] flex flex-col lg:flex-row justify-between items-start gap-8 relative"
         >
           <motion.div variants={fadeInLeft}>
             <motion.h2 
               variants={fadeInUp}
-              className="font-['Inter',Helvetica] font-semibold text-black text-5xl tracking-[-0.96px]"
+              className="font-['Inter',Helvetica] font-semibold text-black text-3xl lg:text-4xl tracking-[-0.96px]"
             >
               SAP AMS
             </motion.h2>
-            <motion.ul 
+            <motion.div 
               variants={staggerContainer}
-              className="mt-[48px] font-['Inter',Helvetica] font-medium text-black text-2xl leading-9"
+              className="mt-[30px] space-y-4 w-full lg:w-auto"
             >
               {amsServices.map((service, index) => (
-                <motion.li 
+                <motion.div 
                   key={index} 
                   variants={fadeInUp}
-                  whileHover={{ x: 10 }}
-                  className="mb-6 cursor-pointer hover:text-[#303a7e] transition-colors"
+                  whileHover={{ x: 10, y: -2 }}
+                  onHoverStart={() => setHoveredService(service)}
+                  onHoverEnd={() => setHoveredService(null)}
+                  className="p-4 rounded-lg hover:shadow-lg hover:bg-gray-50 transition-all cursor-pointer relative"
                 >
-                  {service}
-                </motion.li>
+                  <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9 hover:text-[#303a7e] transition-colors">
+                    {service}
+                  </h3>
+                </motion.div>
               ))}
-            </motion.ul>
+            </motion.div>
           </motion.div>
           <motion.img
             variants={fadeInRight}
             whileHover={{ scale: 1.02 }}
-            className="w-[562px] h-[564px] object-cover"
+            className="w-full lg:w-[450px] h-[300px] lg:h-[450px] object-cover rounded-lg"
             alt="SAP Support"
             src="/figmaAssets/image-6.png"
           />
+
+          {/* AMS Service Overlay */}
+          <AnimatePresence>
+            {hoveredService && amsServices.includes(hoveredService) && serviceOverlays[hoveredService as keyof typeof serviceOverlays] && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-0 right-0 z-50 bg-white border border-gray-200 rounded-xl shadow-2xl p-6 w-[400px] max-h-[300px] overflow-hidden"
+                style={{ marginRight: '50px', marginTop: '150px' }}
+              >
+                <div className="relative">
+                  <h4 className="font-['Inter',Helvetica] font-semibold text-[#303a7e] text-xl mb-3">
+                    {serviceOverlays[hoveredService as keyof typeof serviceOverlays].title}
+                  </h4>
+                  <p className="font-['Inter',Helvetica] text-gray-600 text-sm leading-relaxed mb-4">
+                    {serviceOverlays[hoveredService as keyof typeof serviceOverlays].description}
+                  </p>
+                  <div className="border-t border-gray-100 pt-3">
+                    <h5 className="font-['Inter',Helvetica] font-medium text-gray-800 text-sm mb-2">Key Services:</h5>
+                    <ul className="grid grid-cols-2 gap-1">
+                      {serviceOverlays[hoveredService as keyof typeof serviceOverlays].features.map((feature, index) => (
+                        <li key={index} className="font-['Inter',Helvetica] text-xs text-gray-600 flex items-center">
+                          <span className="w-1.5 h-1.5 bg-[#303a7e] rounded-full mr-2"></span>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="absolute -top-2 -left-2 w-4 h-4 bg-white border-l border-t border-gray-200 transform rotate-45"></div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.section>
 
         {/* Contact Us Section */}
@@ -395,11 +459,11 @@ export const LandingPage = (): JSX.Element => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={staggerContainer}
-          className="mt-[100px] w-full bg-[#f7f7f7] py-[60px] px-[80px] flex justify-between items-center"
+          className="mt-[80px] w-full bg-[#f7f7f7] py-[60px] px-[60px] flex flex-col lg:flex-row justify-between items-center gap-6"
         >
           <motion.h2 
             variants={fadeInLeft}
-            className="font-['Inter',Helvetica] font-semibold text-black text-5xl tracking-[-0.96px]"
+            className="font-['Inter',Helvetica] font-semibold text-black text-3xl lg:text-4xl tracking-[-0.96px]"
           >
             Contact Us
           </motion.h2>
@@ -409,7 +473,7 @@ export const LandingPage = (): JSX.Element => {
           >
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button asChild className="bg-[#303a7e] text-white px-8 py-5 rounded-lg shadow-button-shadow hover:bg-[#2a3370] transition-colors">
-                <a href="mailto:info@raarv.com" target="_blank" rel="noopener noreferrer">
+                <a href="mailto:vasu@raarv.ca" target="_blank" rel="noopener noreferrer">
                   <span className="font-['Inter',Helvetica] font-medium text-2xl leading-9">
                     Email
                   </span>
@@ -422,7 +486,7 @@ export const LandingPage = (): JSX.Element => {
                 variant="outline"
                 className="bg-[#e6e6e6] text-[#000000e6] px-8 py-5 rounded-lg shadow-button-shadow hover:bg-gray-300 transition-colors"
               >
-                <a href="tel:+1234567890" target="_blank" rel="noopener noreferrer">
+                <a href="tel:+14165778708" target="_blank" rel="noopener noreferrer">
                   <span className="font-['Inter',Helvetica] font-medium text-2xl leading-9">
                     Phone
                   </span>
