@@ -224,7 +224,10 @@ export const LandingPage = (): JSX.Element => {
                 SAP made simple. Results made real.
               </motion.p>
               <motion.div variants={fadeInUp} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button className="bg-[#303a7e] text-white px-8 py-5 rounded-lg shadow-blur-glass mt-10 w-fit hover:bg-[#2a3370] transition-colors">
+                <Button 
+                  onClick={() => scrollToSection('contact')}
+                  className="bg-[#303a7e] text-white px-8 py-5 rounded-lg shadow-blur-glass mt-10 w-fit hover:bg-[#2a3370] transition-colors cursor-pointer"
+                >
                   <span className="font-['Inter',Helvetica] text-2xl">
                     Contact Us
                   </span>
