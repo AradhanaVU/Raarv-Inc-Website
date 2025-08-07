@@ -1,11 +1,20 @@
-import React from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useState } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 export const LandingPage = (): JSX.Element => {
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const [hoveredService, setHoveredService] = useState<string | null>(null);
+
+  // Scroll to section function
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   // Animation variants
   const fadeInUp = {
@@ -36,10 +45,39 @@ export const LandingPage = (): JSX.Element => {
 
   // Navigation items
   const navItems = [
-    { label: "About Us", href: "#" },
-    { label: "SAP Services", href: "#" },
-    { label: "SAP AMS", href: "#" },
+    { label: "About Us", sectionId: "hero" },
+    { label: "SAP Services", sectionId: "sap-services" },
+    { label: "SAP AMS", sectionId: "sap-ams" },
   ];
+
+  // Service overlays data
+  const serviceOverlays = {
+    "SAP Core Banking": {
+      title: "SAP Core Banking Solutions",
+      description: "Comprehensive banking solutions including loans management, transactional banking, and financial products subledger. Our expertise covers end-to-end implementation and optimization.",
+      features: ["Implementation & Migration", "Performance Optimization", "Custom Development", "Integration Services"]
+    },
+    "SAP Business Technology Platform (BTP)": {
+      title: "SAP BTP Services",
+      description: "Cloud-native platform services for integration, analytics, and application development. We help businesses leverage the full potential of SAP's technology platform.",
+      features: ["Cloud Integration", "Analytics & Reporting", "Application Development", "Platform Management"]
+    },
+    "SAP Omnichannel Banking (OCB)": {
+      title: "SAP Omnichannel Banking",
+      description: "Modern banking experiences across all customer touchpoints. We implement unified banking solutions that deliver consistent experiences across web, mobile, and branch channels.",
+      features: ["Channel Integration", "Customer Journey", "Digital Banking", "Mobile Solutions"]
+    },
+    "SAP Software Development": {
+      title: "Custom SAP Development",
+      description: "Tailored SAP solutions built to meet your specific business requirements. Our development team creates custom applications and extensions.",
+      features: ["Custom Applications", "System Extensions", "API Development", "Technical Architecture"]
+    },
+    "SAP S/4HANA": {
+      title: "SAP S/4HANA Implementation",
+      description: "Complete S/4HANA transformation services from ECC migration to new implementations. We cover all modules including FI, TRM, and specialized banking components.",
+      features: ["ECC Migration", "New Implementation", "Module Configuration", "Post-Go-Live Support"]
+    }
+  };
 
   // SAP Core Banking services
   const coreBankingServices = [
@@ -104,7 +142,8 @@ export const LandingPage = (): JSX.Element => {
               <motion.div key={index} whileHover={{ y: -2 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   variant="link"
-                  className="font-body-text text-white text-[length:var(--body-text-font-size)] tracking-[var(--body-text-letter-spacing)] leading-[var(--body-text-line-height)] transition-colors hover:text-blue-200"
+                  onClick={() => scrollToSection(item.sectionId)}
+                  className="font-body-text text-white text-[length:var(--body-text-font-size)] tracking-[var(--body-text-letter-spacing)] leading-[var(--body-text-line-height)] transition-colors hover:text-blue-200 cursor-pointer"
                 >
                   {item.label}
                 </Button>
@@ -113,7 +152,8 @@ export const LandingPage = (): JSX.Element => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 variant="default"
-                className="bg-white text-black rounded-lg shadow-button-shadow px-6 py-3.5 hover:bg-gray-100 transition-colors"
+                onClick={() => scrollToSection('contact')}
+                className="bg-white text-black rounded-lg shadow-button-shadow px-6 py-3.5 hover:bg-gray-100 transition-colors cursor-pointer"
               >
                 <span className="font-small-text text-[length:var(--small-text-font-size)] tracking-[var(--small-text-letter-spacing)] leading-[var(--small-text-line-height)]">
                   Contact Us
@@ -125,6 +165,7 @@ export const LandingPage = (): JSX.Element => {
 
         {/* Hero Section */}
         <motion.section 
+          id="hero"
           className="flex flex-row justify-between mt-[53px] px-[87px]"
           style={{ y: heroY, opacity: heroOpacity }}
         >
@@ -179,11 +220,12 @@ export const LandingPage = (): JSX.Element => {
 
         {/* SAP Services Section */}
         <motion.section 
+          id="sap-services"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={staggerContainer}
-          className="mt-[200px] px-[69px]"
+          className="mt-[200px] px-[69px] relative"
         >
           <motion.h2 
             variants={fadeInUp}
@@ -200,7 +242,9 @@ export const LandingPage = (): JSX.Element => {
             <motion.div 
               variants={fadeInLeft}
               whileHover={{ y: -5 }}
-              className="flex flex-col w-[393px] p-4 rounded-lg hover:shadow-lg transition-shadow"
+              onHoverStart={() => setHoveredService('SAP Core Banking')}
+              onHoverEnd={() => setHoveredService(null)}
+              className="flex flex-col w-[393px] p-4 rounded-lg hover:shadow-lg transition-shadow cursor-pointer relative"
             >
               <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
                 SAP Core Banking
@@ -217,17 +261,32 @@ export const LandingPage = (): JSX.Element => {
               variants={fadeInUp}
               className="flex flex-col w-[407px] gap-[93px]"
             >
-              <motion.div whileHover={{ x: 10 }} className="p-4 rounded-lg hover:bg-gray-50 transition-colors">
+              <motion.div 
+                whileHover={{ x: 10 }} 
+                onHoverStart={() => setHoveredService('SAP Business Technology Platform (BTP)')}
+                onHoverEnd={() => setHoveredService(null)}
+                className="p-4 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer relative"
+              >
                 <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
                   SAP Business Technology Platform (BTP)
                 </h3>
               </motion.div>
-              <motion.div whileHover={{ x: 10 }} className="p-4 rounded-lg hover:bg-gray-50 transition-colors">
+              <motion.div 
+                whileHover={{ x: 10 }} 
+                onHoverStart={() => setHoveredService('SAP Omnichannel Banking (OCB)')}
+                onHoverEnd={() => setHoveredService(null)}
+                className="p-4 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer relative"
+              >
                 <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
                   SAP Omnichannel Banking (OCB)
                 </h3>
               </motion.div>
-              <motion.div whileHover={{ x: 10 }} className="p-4 rounded-lg hover:bg-gray-50 transition-colors">
+              <motion.div 
+                whileHover={{ x: 10 }} 
+                onHoverStart={() => setHoveredService('SAP Software Development')}
+                onHoverEnd={() => setHoveredService(null)}
+                className="p-4 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer relative"
+              >
                 <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
                   SAP Software Development
                 </h3>
@@ -238,7 +297,9 @@ export const LandingPage = (): JSX.Element => {
             <motion.div 
               variants={fadeInRight}
               whileHover={{ y: -5 }}
-              className="flex flex-col w-[393px] p-4 rounded-lg hover:shadow-lg transition-shadow"
+              onHoverStart={() => setHoveredService('SAP S/4HANA')}
+              onHoverEnd={() => setHoveredService(null)}
+              className="flex flex-col w-[393px] p-4 rounded-lg hover:shadow-lg transition-shadow cursor-pointer relative"
             >
               <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
                 SAP S/4HANA
@@ -250,10 +311,46 @@ export const LandingPage = (): JSX.Element => {
               </ul>
             </motion.div>
           </motion.div>
+
+          {/* Service Overlay */}
+          <AnimatePresence>
+            {hoveredService && serviceOverlays[hoveredService as keyof typeof serviceOverlays] && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-0 right-0 z-50 bg-white border border-gray-200 rounded-xl shadow-2xl p-6 w-[400px] max-h-[300px] overflow-hidden"
+                style={{ marginRight: '-50px', marginTop: '100px' }}
+              >
+                <div className="relative">
+                  <h4 className="font-['Inter',Helvetica] font-semibold text-[#303a7e] text-xl mb-3">
+                    {serviceOverlays[hoveredService as keyof typeof serviceOverlays].title}
+                  </h4>
+                  <p className="font-['Inter',Helvetica] text-gray-600 text-sm leading-relaxed mb-4">
+                    {serviceOverlays[hoveredService as keyof typeof serviceOverlays].description}
+                  </p>
+                  <div className="border-t border-gray-100 pt-3">
+                    <h5 className="font-['Inter',Helvetica] font-medium text-gray-800 text-sm mb-2">Key Services:</h5>
+                    <ul className="grid grid-cols-2 gap-1">
+                      {serviceOverlays[hoveredService as keyof typeof serviceOverlays].features.map((feature, index) => (
+                        <li key={index} className="font-['Inter',Helvetica] text-xs text-gray-600 flex items-center">
+                          <span className="w-1.5 h-1.5 bg-[#303a7e] rounded-full mr-2"></span>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="absolute -top-2 -left-2 w-4 h-4 bg-white border-l border-t border-gray-200 transform rotate-45"></div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.section>
 
         {/* SAP AMS Section */}
         <motion.section 
+          id="sap-ams"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
@@ -293,6 +390,7 @@ export const LandingPage = (): JSX.Element => {
 
         {/* Contact Us Section */}
         <motion.section 
+          id="contact"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -310,20 +408,25 @@ export const LandingPage = (): JSX.Element => {
             className="flex gap-6"
           >
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button className="bg-[#303a7e] text-white px-8 py-5 rounded-lg shadow-button-shadow hover:bg-[#2a3370] transition-colors">
-                <span className="font-['Inter',Helvetica] font-medium text-2xl leading-9">
-                  Email
-                </span>
+              <Button asChild className="bg-[#303a7e] text-white px-8 py-5 rounded-lg shadow-button-shadow hover:bg-[#2a3370] transition-colors">
+                <a href="mailto:info@raarv.com" target="_blank" rel="noopener noreferrer">
+                  <span className="font-['Inter',Helvetica] font-medium text-2xl leading-9">
+                    Email
+                  </span>
+                </a>
               </Button>
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
+                asChild
                 variant="outline"
                 className="bg-[#e6e6e6] text-[#000000e6] px-8 py-5 rounded-lg shadow-button-shadow hover:bg-gray-300 transition-colors"
               >
-                <span className="font-['Inter',Helvetica] font-medium text-2xl leading-9">
-                  Phone
-                </span>
+                <a href="tel:+1234567890" target="_blank" rel="noopener noreferrer">
+                  <span className="font-['Inter',Helvetica] font-medium text-2xl leading-9">
+                    Phone
+                  </span>
+                </a>
               </Button>
             </motion.div>
           </motion.div>
