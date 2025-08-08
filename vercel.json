@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm install && npx vite build --config vite.config.prod.js",
+  "buildCommand": "npm install && npx vite build --config vite.config.prod.js && mv dist/client/* dist/ && rm -rf dist/client",
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "framework": null
