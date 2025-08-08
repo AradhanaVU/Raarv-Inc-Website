@@ -11,9 +11,8 @@ export default defineConfig({
       '@assets': path.resolve(process.cwd(), 'attached_assets'),
     },
   },
-  root: './client',
   build: {
-    outDir: '../dist/public',
+    outDir: 'dist',
     emptyOutDir: true,
   },
 });
