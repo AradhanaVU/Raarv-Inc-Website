@@ -1,504 +1,568 @@
 import React, { useState } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ArrowRight,
+  Cloud,
+  Code2,
+  Globe,
+  Headphones,
+  Landmark,
+  Menu,
+  RefreshCw,
+  Server,
+  Smartphone,
+  Users,
+  Wrench,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+const fadeInUp = {
+  hidden: { opacity: 1, y: 18 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+};
+
+const stagger = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
+  },
+};
+
+const sapServices = [
+  {
+    title: "SAP Core Banking",
+    summary:
+      "Lending, deposits, collateral, and payments on SAP and Fioneer — from implementation through optimization.",
+    icon: Landmark,
+    items: [
+      "SAP Loans Management (CML)",
+      "SAP Transactional Banking (TRBK)",
+      "SAP Financial Products Subledger (FPSL)",
+      "SAP Fioneer Cloud for Banking",
+      "SAP Collateral Management (CMS)",
+      "SAP S/4HANA Banking for Complex Loans",
+      "SAP Payment Engine (FS-PE)",
+    ],
+  },
+  {
+    title: "SAP S/4HANA",
+    summary:
+      "ECC-to-S/4HANA moves and finance configuration so ledgers, treasury, and credit processes stay aligned.",
+    icon: RefreshCw,
+    items: [
+      "ECC to S/4HANA transition",
+      "Financial Accounting (FI)",
+      "Contract and Lease Management (CLM / RE-FX)",
+      "Treasury and Risk Management (TRM)",
+      "Collections and Dispute Management",
+      "Credit Management (CM)",
+    ],
+  },
+  {
+    title: "SAP Business Technology Platform",
+    summary:
+      "Integration, analytics, and cloud apps on BTP so SAP systems connect cleanly to the rest of the bank.",
+    icon: Cloud,
+    items: [
+      "Cloud integration",
+      "Analytics and reporting",
+      "Application development",
+      "Platform management",
+    ],
+  },
+  {
+    title: "SAP Omnichannel Banking",
+    summary:
+      "One customer journey across web, mobile, and branch instead of disconnected channel builds.",
+    icon: Smartphone,
+    items: [
+      "Channel integration",
+      "Customer journey design",
+      "Digital banking",
+      "Mobile solutions",
+    ],
+  },
+  {
+    title: "SAP Software Development",
+    summary:
+      "Custom applications, extensions, and APIs when standard SAP does not cover the process.",
+    icon: Code2,
+    items: [
+      "Custom applications",
+      "System extensions",
+      "API development",
+      "Technical architecture",
+    ],
+  },
+];
+
+const amsServices = [
+  {
+    title: "Help desk",
+    summary: "Round-the-clock incident handling and user support for live SAP systems.",
+    icon: Headphones,
+  },
+  {
+    title: "Staff augmentation",
+    summary: "Experienced SAP consultants who join your team for a project or an AMS roster.",
+    icon: Users,
+  },
+  {
+    title: "AMS service management",
+    summary: "Maintenance, monitoring, and change control so the application keeps improving after go-live.",
+    icon: Wrench,
+  },
+  {
+    title: "Nearshore delivery",
+    summary: "Cost-effective SAP work from nearshore teams in compatible time zones.",
+    icon: Globe,
+  },
+  {
+    title: "SAP Basis",
+    summary: "System administration, performance, security, and infrastructure for the SAP landscape.",
+    icon: Server,
+  },
+];
+
+const stats = [
+  { value: "20+", label: "Years delivering SAP" },
+  { value: "Banking", label: "and financial services" },
+  { value: "AMS", label: "support after go-live" },
+];
+
+const focusPoints = [
+  "Core banking on SAP and Fioneer",
+  "S/4HANA finance and treasury",
+  "Help desk, Basis, and AMS",
+];
+
 export const LandingPage = (): JSX.Element => {
-  const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const [hoveredService, setHoveredService] = useState<string | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Scroll to section function
   const scrollToSection = (sectionId: string) => {
+    setMobileOpen(false);
     const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    element?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // Animation variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 60 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-  };
-
-  const fadeInLeft = {
-    hidden: { opacity: 0, x: -60 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
-  };
-
-  const fadeInRight = {
-    hidden: { opacity: 0, x: 60 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  // Navigation items
   const navItems = [
-    { label: "About Us", sectionId: "hero" },
+    { label: "About", sectionId: "about" },
     { label: "SAP Services", sectionId: "sap-services" },
     { label: "SAP AMS", sectionId: "sap-ams" },
   ];
 
-  // Service overlays data
-  const serviceOverlays = {
-    "SAP Core Banking": {
-      title: "SAP Core Banking Solutions",
-      description: "Comprehensive banking solutions including loans management, transactional banking, and financial products subledger. Our expertise covers end-to-end implementation and optimization.",
-      features: ["Implementation & Migration", "Performance Optimization", "Custom Development", "Integration Services"]
-    },
-    "SAP Business Technology Platform (BTP)": {
-      title: "SAP BTP Services",
-      description: "Cloud-native platform services for integration, analytics, and application development. We help businesses leverage the full potential of SAP's technology platform.",
-      features: ["Cloud Integration", "Analytics & Reporting", "Application Development", "Platform Management"]
-    },
-    "SAP Omnichannel Banking (OCB)": {
-      title: "SAP Omnichannel Banking",
-      description: "Modern banking experiences across all customer touchpoints. We implement unified banking solutions that deliver consistent experiences across web, mobile, and branch channels.",
-      features: ["Channel Integration", "Customer Journey", "Digital Banking", "Mobile Solutions"]
-    },
-    "SAP Software Development": {
-      title: "Custom SAP Development",
-      description: "Tailored SAP solutions built to meet your specific business requirements. Our development team creates custom applications and extensions.",
-      features: ["Custom Applications", "System Extensions", "API Development", "Technical Architecture"]
-    },
-    "SAP S/4HANA": {
-      title: "SAP S/4HANA Implementation",
-      description: "Complete S/4HANA transformation services from ECC migration to new implementations. We cover all modules including FI, TRM, and specialized banking components.",
-      features: ["ECC Migration", "New Implementation", "Module Configuration", "Post-Go-Live Support"]
-    },
-    "Help Desk Services": {
-      title: "24/7 Help Desk Support",
-      description: "Round-the-clock technical support for your SAP systems. Our experienced team provides immediate assistance and resolution for system issues.",
-      features: ["24/7 Support", "Incident Management", "User Training", "System Monitoring"]
-    },
-    "Staff Augmentation for AMS": {
-      title: "SAP Staff Augmentation",
-      description: "Extend your team with our skilled SAP professionals. We provide experienced consultants to supplement your internal capabilities.",
-      features: ["Skilled Consultants", "Flexible Engagement", "Knowledge Transfer", "Team Integration"]
-    },
-    "AMS Service Management": {
-      title: "Application Management Services",
-      description: "Comprehensive management of your SAP applications including maintenance, monitoring, and continuous improvement initiatives.",
-      features: ["System Maintenance", "Performance Monitoring", "Change Management", "Continuous Improvement"]
-    },
-    "Nearshore IT Services": {
-      title: "Nearshore SAP Services",
-      description: "Cost-effective SAP services delivered from our nearshore centers with cultural alignment and timezone compatibility.",
-      features: ["Cost Optimization", "Cultural Alignment", "Timezone Coverage", "Quality Delivery"]
-    },
-    "SAP Basis Services": {
-      title: "SAP Basis Administration",
-      description: "Complete SAP Basis services including system administration, performance tuning, and infrastructure management.",
-      features: ["System Administration", "Performance Tuning", "Infrastructure Management", "Security Management"]
-    }
-  };
-
-  // SAP Core Banking services
-  const coreBankingServices = [
-    "SAP Loans Management (CML)",
-    "SAP Transactional Banking (TRBK)",
-    "SAP Financial Products Subledger (FPSL)",
-    "SAP Fioneer Cloud for Banking",
-    "SAP Collateral Management (CMS)",
-    "SAP S/4HANA Banking for Complex Loans",
-    "SAP Payment Engine (FS-PE)",
-  ];
-
-  // SAP S/4HANA services
-  const s4hanaServices = [
-    "ECC to S/4HANA Transition",
-    "Financial Accounting (FI)",
-    "SAP Contract and Lease Management (CLM / RE-FX)",
-    "SAP Treasury and Risk Management (TRM)",
-    "SAP Collections and Dispute Management",
-    "SAP Credit Management (CM)",
-  ];
-
-  // SAP AMS services
-  const amsServices = [
-    "Help Desk Services",
-    "Staff Augmentation for AMS",
-    "AMS Service Management",
-    "Nearshore IT Services",
-    "SAP Basis Services",
-  ];
-
   return (
-    <div className="bg-white grid justify-items-center [align-items:start] w-screen scroll-smooth">
-      <motion.div 
-        initial="hidden"
-        animate="visible"
-        className="bg-white overflow-hidden w-full max-w-[1200px] relative"
-      >
-        {/* Header */}
-        <motion.header 
-          initial={{ y: -100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="w-full h-[164px] bg-[#303a7e] flex items-center justify-between px-8"
-        >
-          <motion.img
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            whileHover={{ scale: 1.05 }}
-            className="w-[191px] h-32 object-cover cursor-pointer"
-            alt="Raarv Logo"
-            src="/figmaAssets/image-4.png"
-          />
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex items-center gap-12"
+    <div className="min-h-screen overflow-x-hidden bg-white text-slate-900">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#303a7e]">
+        <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-5 sm:px-8">
+          <button
+            type="button"
+            onClick={() => scrollToSection("about")}
+            className="flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+            aria-label="Raarv Inc home"
           >
-            {navItems.map((item, index) => (
-              <motion.div key={index} whileHover={{ y: -2 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  variant="link"
-                  onClick={() => scrollToSection(item.sectionId)}
-                  className="font-body-text text-white text-[length:var(--body-text-font-size)] tracking-[var(--body-text-letter-spacing)] leading-[var(--body-text-line-height)] transition-colors hover:text-blue-200 cursor-pointer"
-                >
-                  {item.label}
-                </Button>
-              </motion.div>
+            <img
+              className="h-14 w-auto object-contain sm:h-16"
+              alt="Raarv Inc"
+              src="/figmaAssets/image-4.png"
+            />
+          </button>
+
+          <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+            {navItems.map((item) => (
+              <button
+                key={item.sectionId}
+                type="button"
+                onClick={() => scrollToSection(item.sectionId)}
+                className="text-sm font-medium text-white/90 transition-colors hover:text-white"
+              >
+                {item.label}
+              </button>
             ))}
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="default"
-                onClick={() => scrollToSection('contact')}
-                className="bg-white text-black rounded-lg shadow-button-shadow px-6 py-3.5 hover:bg-gray-100 transition-colors cursor-pointer"
-              >
-                <span className="font-small-text text-[length:var(--small-text-font-size)] tracking-[var(--small-text-letter-spacing)] leading-[var(--small-text-line-height)]">
-                  Contact Us
-                </span>
-              </Button>
-            </motion.div>
-          </motion.div>
-        </motion.header>
+            <Button
+              onClick={() => scrollToSection("contact")}
+              className="h-10 rounded-lg bg-white px-5 text-sm font-semibold text-[#303a7e] shadow-none hover:bg-blue-50"
+            >
+              Contact us
+            </Button>
+          </nav>
 
-        {/* Hero Section */}
-        <motion.section 
-          id="hero"
-          className="flex flex-row justify-between mt-[40px] px-[60px]"
-          style={{ y: heroY, opacity: heroOpacity }}
-        >
-          <motion.div 
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-            className="flex flex-col gap-8 max-w-[700px]"
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white hover:bg-white/10 md:hidden"
+            onClick={() => setMobileOpen((open) => !open)}
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
-            <div className="flex flex-col gap-6">
-              <motion.h1 
-                variants={fadeInUp}
-                className="font-['Inter',Helvetica] font-bold text-black text-[48px] lg:text-[64px] tracking-[-1.28px]"
-              >
-                Raarv Inc
-              </motion.h1>
-              <motion.p 
-                variants={fadeInUp}
-                className="font-['Inter',Helvetica] font-normal text-black text-lg lg:text-xl leading-relaxed mt-[30px]"
-              >
-                We&apos;re a dedicated boutique SAP consulting firm specializing
-                in SAP and Fioneer financial services and SAP AMS. With 20+
-                years of hands-on experience working with clients across the
-                globe in areas such as core banking, financials, and
-                architecture. We deliver practical, high-impact solutions — from
-                full implementations to ongoing support. Our expertise spans
-                Account Origination, Loans and Collateral Management, Financial
-                Accounting, and more.
-                <br />
-                <br />
-                SAP made simple. Results made real.
-              </motion.p>
-              <motion.div variants={fadeInUp} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button 
-                  onClick={() => scrollToSection('contact')}
-                  className="bg-[#303a7e] text-white px-8 py-5 rounded-lg shadow-blur-glass mt-10 w-fit hover:bg-[#2a3370] transition-colors cursor-pointer"
+            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.nav
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden border-t border-white/10 md:hidden"
+              aria-label="Mobile"
+            >
+              <div className="flex flex-col gap-1 px-5 py-4">
+                {navItems.map((item) => (
+                  <button
+                    key={item.sectionId}
+                    type="button"
+                    onClick={() => scrollToSection(item.sectionId)}
+                    className="rounded-lg px-3 py-3 text-left text-base font-medium text-white hover:bg-white/10"
+                  >
+                    {item.label}
+                  </button>
+                ))}
+                <Button
+                  onClick={() => scrollToSection("contact")}
+                  className="mt-2 h-11 rounded-lg bg-white text-sm font-semibold text-[#303a7e] hover:bg-blue-50"
                 >
-                  <span className="font-['Inter',Helvetica] text-2xl">
-                    Contact Us
-                  </span>
+                  Contact us
+                </Button>
+              </div>
+            </motion.nav>
+          )}
+        </AnimatePresence>
+      </header>
+
+      <main>
+        <section
+          id="about"
+          className="relative overflow-x-clip overflow-y-visible bg-gradient-to-b from-[#eef1f8] to-white scroll-mt-[72px]"
+        >
+          <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#303a7e]/10 blur-3xl" />
+          <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={stagger}
+              className="flex flex-col gap-6"
+            >
+              <motion.p
+                variants={fadeInUp}
+                className="text-sm font-semibold uppercase tracking-[0.18em] text-[#303a7e]"
+              >
+                Boutique SAP consulting
+              </motion.p>
+              <motion.h1
+                variants={fadeInUp}
+                className="text-4xl font-bold tracking-tight text-[#1a2148] sm:text-5xl lg:text-[56px] lg:leading-[1.1]"
+              >
+                SAP made simple.
+                <br />
+                Results made real.
+              </motion.h1>
+              <motion.p
+                variants={fadeInUp}
+                className="max-w-xl text-lg leading-relaxed text-slate-700"
+              >
+                Raarv Inc is a boutique firm for SAP and Fioneer in financial
+                services. We implement, extend, and support core banking,
+                financials, and architecture for clients worldwide.
+              </motion.p>
+              <motion.div variants={fadeInUp} className="flex w-full max-w-xl flex-col gap-3 sm:flex-row">
+                <Button
+                  onClick={() => scrollToSection("contact")}
+                  className="h-12 w-full rounded-lg bg-[#303a7e] px-6 text-base font-semibold text-white shadow-none hover:bg-[#252d64] sm:w-auto"
+                >
+                  Contact us
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+                <Button
+                  onClick={() => scrollToSection("sap-services")}
+                  variant="outline"
+                  className="h-12 w-full rounded-lg border-[#303a7e]/25 bg-white px-6 text-base font-semibold text-[#303a7e] hover:bg-[#eef1f8] sm:w-auto"
+                >
+                  See our services
                 </Button>
               </motion.div>
-            </div>
-          </motion.div>
-          <motion.img
-            initial={{ opacity: 0, scale: 0.8, x: 100 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            whileHover={{ scale: 1.02 }}
-            className="w-[400px] lg:w-[500px] h-[400px] lg:h-[500px] object-cover"
-            alt="Raarv Consulting"
-            src="/figmaAssets/image-5.png"
-          />
-        </motion.section>
+            </motion.div>
 
-        {/* SAP Services Section */}
-        <motion.section 
+            <motion.aside
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="min-w-0 overflow-hidden rounded-2xl bg-[#303a7e] text-white shadow-xl shadow-[#303a7e]/25"
+            >
+              <div className="p-8 sm:p-10">
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
+                  Where we help
+                </p>
+                <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-[28px]">
+                  SAP for banks and financial institutions
+                </h2>
+                <ul className="mt-6 space-y-4">
+                  {focusPoints.map((point) => (
+                    <li key={point} className="flex items-start gap-3 text-[15px] leading-relaxed text-white/90">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="grid grid-cols-1 divide-y divide-white/15 border-t border-white/15 bg-[#252d64] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="px-4 py-4 text-center sm:px-3 sm:py-5">
+                    <p className="text-xl font-bold text-white sm:text-2xl">
+                      {stat.value}
+                    </p>
+                    <p className="mt-1 text-sm leading-snug text-white/75 sm:text-xs">
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </motion.aside>
+          </div>
+        </section>
+
+        <section
           id="sap-services"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={staggerContainer}
-          className="mt-[120px] px-[60px] relative"
+          className="scroll-mt-[72px] bg-white py-16 sm:py-20"
         >
-          <motion.h2 
-            variants={fadeInUp}
-            className="font-['Inter',Helvetica] font-semibold text-black text-3xl lg:text-4xl tracking-[-0.96px]"
-          >
-            SAP Services
-          </motion.h2>
-
-          <motion.div 
-            variants={staggerContainer}
-            className="flex flex-col lg:flex-row gap-8 mt-[40px] ml-0 lg:ml-[18px]"
-          >
-            {/* Core Banking Column */}
-            <motion.div 
-              variants={fadeInLeft}
-              whileHover={{ y: -5 }}
-              onHoverStart={() => setHoveredService('SAP Core Banking')}
-              onHoverEnd={() => setHoveredService(null)}
-              className="flex flex-col w-full lg:w-[350px] p-4 rounded-lg hover:shadow-lg transition-shadow cursor-pointer relative"
+          <div className="mx-auto max-w-6xl px-5 sm:px-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={stagger}
+              className="max-w-2xl"
             >
-              <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
-                SAP Core Banking
-              </h3>
-              <ul className="mt-1 font-['Inter',Helvetica] font-normal text-[#828282] text-xl leading-[30px]">
-                {coreBankingServices.map((service, index) => (
-                  <li key={index}>{service}</li>
-                ))}
-              </ul>
+              <motion.p
+                variants={fadeInUp}
+                className="text-sm font-semibold uppercase tracking-[0.18em] text-[#303a7e]"
+              >
+                What we implement
+              </motion.p>
+              <motion.h2
+                variants={fadeInUp}
+                className="mt-3 text-3xl font-semibold tracking-tight text-[#1a2148] sm:text-4xl"
+              >
+                SAP services
+              </motion.h2>
+              <motion.p
+                variants={fadeInUp}
+                className="mt-4 text-lg leading-relaxed text-slate-700"
+              >
+                Banking platforms, finance transformation, and custom SAP work —
+                each described in plain language, with the modules we cover
+                underneath.
+              </motion.p>
             </motion.div>
 
-            {/* Middle Column */}
-            <motion.div 
-              variants={fadeInUp}
-              className="flex flex-col w-full lg:w-[350px] gap-12 lg:gap-[80px]"
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+              variants={stagger}
+              className="mt-10 grid gap-5 md:grid-cols-2"
             >
-              <motion.div 
-                whileHover={{ x: 10 }} 
-                onHoverStart={() => setHoveredService('SAP Business Technology Platform (BTP)')}
-                onHoverEnd={() => setHoveredService(null)}
-                className="p-4 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer relative"
-              >
-                <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
-                  SAP Business Technology Platform (BTP)
-                </h3>
-              </motion.div>
-              <motion.div 
-                whileHover={{ x: 10 }} 
-                onHoverStart={() => setHoveredService('SAP Omnichannel Banking (OCB)')}
-                onHoverEnd={() => setHoveredService(null)}
-                className="p-4 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer relative"
-              >
-                <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
-                  SAP Omnichannel Banking (OCB)
-                </h3>
-              </motion.div>
-              <motion.div 
-                whileHover={{ x: 10 }} 
-                onHoverStart={() => setHoveredService('SAP Software Development')}
-                onHoverEnd={() => setHoveredService(null)}
-                className="p-4 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer relative"
-              >
-                <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
-                  SAP Software Development
-                </h3>
-              </motion.div>
-            </motion.div>
-
-            {/* S/4HANA Column */}
-            <motion.div 
-              variants={fadeInRight}
-              whileHover={{ y: -5 }}
-              onHoverStart={() => setHoveredService('SAP S/4HANA')}
-              onHoverEnd={() => setHoveredService(null)}
-              className="flex flex-col w-full lg:w-[350px] p-4 rounded-lg hover:shadow-lg transition-shadow cursor-pointer relative"
-            >
-              <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9">
-                SAP S/4HANA
-              </h3>
-              <ul className="mt-1 font-['Inter',Helvetica] font-normal text-[#828282] text-xl leading-[30px]">
-                {s4hanaServices.map((service, index) => (
-                  <li key={index}>{service}</li>
-                ))}
-              </ul>
-            </motion.div>
-          </motion.div>
-
-          {/* Service Overlay */}
-          <AnimatePresence>
-            {hoveredService && serviceOverlays[hoveredService as keyof typeof serviceOverlays] && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-0 right-0 z-50 bg-white border border-gray-200 rounded-xl shadow-2xl p-6 w-[400px] max-h-[300px] overflow-hidden"
-                style={{ marginRight: '-50px', marginTop: '100px' }}
-              >
-                <div className="relative">
-                  <h4 className="font-['Inter',Helvetica] font-semibold text-[#303a7e] text-xl mb-3">
-                    {serviceOverlays[hoveredService as keyof typeof serviceOverlays].title}
-                  </h4>
-                  <p className="font-['Inter',Helvetica] text-gray-600 text-sm leading-relaxed mb-4">
-                    {serviceOverlays[hoveredService as keyof typeof serviceOverlays].description}
-                  </p>
-                  <div className="border-t border-gray-100 pt-3">
-                    <h5 className="font-['Inter',Helvetica] font-medium text-gray-800 text-sm mb-2">Key Services:</h5>
-                    <ul className="grid grid-cols-2 gap-1">
-                      {serviceOverlays[hoveredService as keyof typeof serviceOverlays].features.map((feature, index) => (
-                        <li key={index} className="font-['Inter',Helvetica] text-xs text-gray-600 flex items-center">
-                          <span className="w-1.5 h-1.5 bg-[#303a7e] rounded-full mr-2"></span>
-                          {feature}
+              {sapServices.slice(0, 2).map((service) => {
+                const Icon = service.icon;
+                return (
+                  <motion.article
+                    key={service.title}
+                    variants={fadeInUp}
+                    className="rounded-2xl border border-slate-200 bg-[#f7f8fc] p-6 transition-shadow hover:shadow-md"
+                  >
+                    <div className="flex items-start gap-4">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#303a7e] text-white">
+                        <Icon className="h-5 w-5" aria-hidden="true" />
+                      </span>
+                      <div>
+                        <h3 className="text-xl font-semibold text-[#1a2148]">
+                          {service.title}
+                        </h3>
+                        <p className="mt-2 text-[15px] leading-relaxed text-slate-700">
+                          {service.summary}
+                        </p>
+                      </div>
+                    </div>
+                    <ul className="mt-5 space-y-2 border-t border-slate-200/80 pt-4">
+                      {service.items.map((item) => (
+                        <li
+                          key={item}
+                          className="flex gap-2 text-sm text-slate-700"
+                        >
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#303a7e]" />
+                          {item}
                         </li>
                       ))}
                     </ul>
-                  </div>
-                  <div className="absolute -top-2 -left-2 w-4 h-4 bg-white border-l border-t border-gray-200 transform rotate-45"></div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.section>
+                  </motion.article>
+                );
+              })}
+            </motion.div>
 
-        {/* SAP AMS Section */}
-        <motion.section 
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+              variants={stagger}
+              className="mt-5 grid gap-5 md:grid-cols-3"
+            >
+              {sapServices.slice(2).map((service) => {
+                const Icon = service.icon;
+                return (
+                  <motion.article
+                    key={service.title}
+                    variants={fadeInUp}
+                    className="rounded-2xl border border-slate-200 bg-[#f7f8fc] p-6 transition-shadow hover:shadow-md"
+                  >
+                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#303a7e] text-white">
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </span>
+                    <h3 className="mt-4 text-lg font-semibold text-[#1a2148]">
+                      {service.title}
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-relaxed text-slate-700">
+                      {service.summary}
+                    </p>
+                    <ul className="mt-5 space-y-2 border-t border-slate-200/80 pt-4">
+                      {service.items.map((item) => (
+                        <li
+                          key={item}
+                          className="flex gap-2 text-sm text-slate-700"
+                        >
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#303a7e]" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.article>
+                );
+              })}
+            </motion.div>
+          </div>
+        </section>
+
+        <section
           id="sap-ams"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          className="mt-[80px] px-[60px] flex flex-col lg:flex-row justify-between items-start gap-8 relative"
+          className="scroll-mt-[72px] bg-[#eef1f8] py-16 sm:py-20"
         >
-          <motion.div variants={fadeInLeft}>
-            <motion.h2 
-              variants={fadeInUp}
-              className="font-['Inter',Helvetica] font-semibold text-black text-3xl lg:text-4xl tracking-[-0.96px]"
-            >
-              SAP AMS
-            </motion.h2>
-            <motion.div 
-              variants={staggerContainer}
-              className="mt-[30px] space-y-4 w-full lg:w-auto"
-            >
-              {amsServices.map((service, index) => (
-                <motion.div 
-                  key={index} 
-                  variants={fadeInUp}
-                  whileHover={{ x: 10, y: -2 }}
-                  onHoverStart={() => setHoveredService(service)}
-                  onHoverEnd={() => setHoveredService(null)}
-                  className="p-4 rounded-lg hover:shadow-lg hover:bg-gray-50 transition-all cursor-pointer relative"
-                >
-                  <h3 className="font-['Inter',Helvetica] font-medium text-black text-2xl leading-9 hover:text-[#303a7e] transition-colors">
-                    {service}
-                  </h3>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-          <motion.img
-            variants={fadeInRight}
-            whileHover={{ scale: 1.02 }}
-            className="w-full lg:w-[450px] h-[300px] lg:h-[450px] object-cover rounded-lg"
-            alt="SAP Support"
-            src="/figmaAssets/image-6.png"
-          />
-
-          {/* AMS Service Overlay */}
-          <AnimatePresence>
-            {hoveredService && amsServices.includes(hoveredService) && serviceOverlays[hoveredService as keyof typeof serviceOverlays] && (
+          <div className="mx-auto max-w-6xl px-5 sm:px-8">
+            <div className="grid items-start gap-10 lg:grid-cols-[1fr_0.85fr]">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-0 right-0 z-50 bg-white border border-gray-200 rounded-xl shadow-2xl p-6 w-[400px] max-h-[300px] overflow-hidden"
-                style={{ marginRight: '50px', marginTop: '150px' }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={stagger}
               >
-                <div className="relative">
-                  <h4 className="font-['Inter',Helvetica] font-semibold text-[#303a7e] text-xl mb-3">
-                    {serviceOverlays[hoveredService as keyof typeof serviceOverlays].title}
-                  </h4>
-                  <p className="font-['Inter',Helvetica] text-gray-600 text-sm leading-relaxed mb-4">
-                    {serviceOverlays[hoveredService as keyof typeof serviceOverlays].description}
-                  </p>
-                  <div className="border-t border-gray-100 pt-3">
-                    <h5 className="font-['Inter',Helvetica] font-medium text-gray-800 text-sm mb-2">Key Services:</h5>
-                    <ul className="grid grid-cols-2 gap-1">
-                      {serviceOverlays[hoveredService as keyof typeof serviceOverlays].features.map((feature, index) => (
-                        <li key={index} className="font-['Inter',Helvetica] text-xs text-gray-600 flex items-center">
-                          <span className="w-1.5 h-1.5 bg-[#303a7e] rounded-full mr-2"></span>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="absolute -top-2 -left-2 w-4 h-4 bg-white border-l border-t border-gray-200 transform rotate-45"></div>
+                <motion.p
+                  variants={fadeInUp}
+                  className="text-sm font-semibold uppercase tracking-[0.18em] text-[#303a7e]"
+                >
+                  After go-live
+                </motion.p>
+                <motion.h2
+                  variants={fadeInUp}
+                  className="mt-3 text-3xl font-semibold tracking-tight text-[#1a2148] sm:text-4xl"
+                >
+                  SAP application management
+                </motion.h2>
+                <motion.p
+                  variants={fadeInUp}
+                  className="mt-4 max-w-xl text-lg leading-relaxed text-slate-700"
+                >
+                  We keep production SAP stable and staffed: help desk, Basis,
+                  and extra specialists when your internal team needs capacity.
+                </motion.p>
+
+                <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                  {amsServices.map((service) => {
+                    const Icon = service.icon;
+                    return (
+                      <motion.article
+                        key={service.title}
+                        variants={fadeInUp}
+                        className="rounded-xl border border-[#303a7e]/10 bg-white p-5"
+                      >
+                        <Icon
+                          className="h-5 w-5 text-[#303a7e]"
+                          aria-hidden="true"
+                        />
+                        <h3 className="mt-3 text-base font-semibold text-[#1a2148]">
+                          {service.title}
+                        </h3>
+                        <p className="mt-1.5 text-sm leading-relaxed text-slate-700">
+                          {service.summary}
+                        </p>
+                      </motion.article>
+                    );
+                  })}
                 </div>
               </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.section>
 
-        {/* Contact Us Section */}
-        <motion.section 
+              <motion.img
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="w-full rounded-2xl object-cover shadow-lg shadow-[#303a7e]/10 lg:sticky lg:top-28"
+                alt="SAP support and application management"
+                src="/figmaAssets/image-6.png"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section
           id="contact"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="mt-[80px] w-full bg-[#f7f7f7] py-[60px] px-[60px] flex flex-col lg:flex-row justify-between items-center gap-6"
+          className="scroll-mt-[72px] bg-[#303a7e] py-16 sm:py-20"
         >
-          <motion.h2 
-            variants={fadeInLeft}
-            className="font-['Inter',Helvetica] font-semibold text-black text-3xl lg:text-4xl tracking-[-0.96px]"
-          >
-            Contact Us
-          </motion.h2>
-          <motion.div 
-            variants={fadeInRight}
-            className="flex gap-6"
-          >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button asChild className="bg-[#303a7e] text-white px-8 py-5 rounded-lg shadow-button-shadow hover:bg-[#2a3370] transition-colors">
-                <a href="mailto:vasu@raarv.ca" target="_blank" rel="noopener noreferrer">
-                  <span className="font-['Inter',Helvetica] font-medium text-2xl leading-9">
-                    Email
-                  </span>
+          <div className="mx-auto grid max-w-6xl gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
+                Next step
+              </p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                Talk with us about your SAP landscape
+              </h2>
+              <p className="mt-4 max-w-xl text-lg leading-relaxed text-white/80">
+                Implementations, S/4HANA moves, or ongoing AMS — email or call
+                and we will follow up with next steps.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Button
+                asChild
+                className="h-14 rounded-lg bg-white px-8 text-lg font-semibold text-[#303a7e] shadow-none hover:bg-blue-50"
+              >
+                <a href="mailto:vasu@raarv.ca" aria-label="Email Raarv Inc">
+                  Email
                 </a>
               </Button>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 asChild
                 variant="outline"
-                className="bg-[#e6e6e6] text-[#000000e6] px-8 py-5 rounded-lg shadow-button-shadow hover:bg-gray-300 transition-colors"
+                className="h-14 rounded-lg border-white/30 bg-white/10 px-8 text-lg font-semibold text-white hover:bg-white/15 hover:text-white"
               >
-                <a href="tel:+14165778708" target="_blank" rel="noopener noreferrer">
-                  <span className="font-['Inter',Helvetica] font-medium text-2xl leading-9">
-                    Phone
-                  </span>
+                <a href="tel:+14165778708" aria-label="Call Raarv Inc">
+                  Phone
                 </a>
               </Button>
-            </motion.div>
-          </motion.div>
-        </motion.section>
-      </motion.div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t border-white/10 bg-[#252d64] py-6">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 text-sm text-white/70 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <p>
+            © {new Date().getFullYear()} Raarv Inc. (1001162638 ONTARIO INC).
+            Consulting revamped.
+          </p>
+          <p>SAP consulting for financial services</p>
+        </div>
+      </footer>
     </div>
   );
 };
