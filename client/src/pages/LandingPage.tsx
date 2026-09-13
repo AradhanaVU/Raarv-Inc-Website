@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -141,6 +141,13 @@ const focusPoints = [
 export const LandingPage = (): JSX.Element => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
   const scrollToSection = (sectionId: string) => {
     setMobileOpen(false);
     const element = document.getElementById(sectionId);
@@ -154,17 +161,17 @@ export const LandingPage = (): JSX.Element => {
   ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white text-slate-900">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#303a7e]">
-        <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-5 sm:px-8">
+    <div className="min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-white text-slate-900">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#303a7e] pt-[env(safe-area-inset-top)]">
+        <div className="mx-auto flex h-16 min-w-0 max-w-6xl items-center justify-between gap-3 px-4 sm:h-[72px] sm:px-8">
           <button
             type="button"
             onClick={() => scrollToSection("about")}
-            className="flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+            className="flex min-w-0 items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
             aria-label="Raarv Inc home"
           >
             <img
-              className="h-14 w-auto object-contain sm:h-16"
+              className="h-10 w-auto max-w-[7.5rem] min-w-0 object-contain object-left sm:h-14 sm:max-w-[10rem] md:h-16 md:max-w-[12rem]"
               alt="Raarv Inc"
               src="/figmaAssets/image-4.png"
             />
@@ -191,7 +198,7 @@ export const LandingPage = (): JSX.Element => {
 
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white hover:bg-white/10 md:hidden"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-white hover:bg-white/10 md:hidden"
             onClick={() => setMobileOpen((open) => !open)}
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -209,7 +216,7 @@ export const LandingPage = (): JSX.Element => {
               className="overflow-hidden border-t border-white/10 md:hidden"
               aria-label="Mobile"
             >
-              <div className="flex flex-col gap-1 px-5 py-4">
+              <div className="flex flex-col gap-1 px-4 py-4 sm:px-8">
                 {navItems.map((item) => (
                   <button
                     key={item.sectionId}
@@ -232,28 +239,28 @@ export const LandingPage = (): JSX.Element => {
         </AnimatePresence>
       </header>
 
-      <main>
+      <main className="min-w-0">
         <section
           id="about"
-          className="relative overflow-x-clip overflow-y-visible bg-gradient-to-b from-[#eef1f8] to-white scroll-mt-[72px]"
+          className="relative scroll-mt-16 overflow-x-clip bg-gradient-to-b from-[#eef1f8] to-white sm:scroll-mt-[72px]"
         >
-          <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#303a7e]/10 blur-3xl" />
-          <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
+          <div className="pointer-events-none absolute right-0 top-0 h-56 w-56 translate-x-1/3 -translate-y-1/4 rounded-full bg-[#303a7e]/10 blur-3xl sm:h-72 sm:w-72" />
+          <div className="relative mx-auto grid max-w-6xl min-w-0 items-center gap-8 px-4 py-10 sm:gap-12 sm:px-8 sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
             <motion.div
               initial="hidden"
               animate="visible"
               variants={stagger}
-              className="flex flex-col gap-6"
+              className="flex min-w-0 flex-col gap-5 sm:gap-6"
             >
               <motion.p
                 variants={fadeInUp}
-                className="text-sm font-semibold uppercase tracking-[0.18em] text-[#303a7e]"
+                className="text-xs font-semibold uppercase tracking-[0.14em] text-[#303a7e] sm:text-sm sm:tracking-[0.18em]"
               >
                 Boutique SAP consulting
               </motion.p>
               <motion.h1
                 variants={fadeInUp}
-                className="text-4xl font-bold tracking-tight text-[#1a2148] sm:text-5xl lg:text-[56px] lg:leading-[1.1]"
+                className="text-balance text-[1.85rem] font-bold leading-tight tracking-tight text-[#1a2148] sm:text-5xl lg:text-[56px] lg:leading-[1.1]"
               >
                 SAP made simple.
                 <br />
@@ -261,7 +268,7 @@ export const LandingPage = (): JSX.Element => {
               </motion.h1>
               <motion.p
                 variants={fadeInUp}
-                className="max-w-xl text-lg leading-relaxed text-slate-700"
+                className="max-w-xl text-pretty text-base leading-relaxed text-slate-700 sm:text-lg"
               >
                 Raarv Inc is a boutique firm for SAP and Fioneer in financial
                 services. We implement, extend, and support core banking,
@@ -291,11 +298,11 @@ export const LandingPage = (): JSX.Element => {
               transition={{ duration: 0.6, delay: 0.15 }}
               className="min-w-0 overflow-hidden rounded-2xl bg-[#303a7e] text-white shadow-xl shadow-[#303a7e]/25"
             >
-              <div className="p-8 sm:p-10">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
+              <div className="p-5 sm:p-10">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/70 sm:text-sm sm:tracking-[0.18em]">
                   Where we help
                 </p>
-                <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-[28px]">
+                <h2 className="mt-3 text-balance text-xl font-semibold tracking-tight sm:text-[28px]">
                   SAP for banks and financial institutions
                 </h2>
                 <ul className="mt-6 space-y-4">
@@ -325,31 +332,31 @@ export const LandingPage = (): JSX.Element => {
 
         <section
           id="sap-services"
-          className="scroll-mt-[72px] bg-white py-16 sm:py-20"
+          className="scroll-mt-16 bg-white py-12 sm:scroll-mt-[72px] sm:py-20"
         >
-          <div className="mx-auto max-w-6xl px-5 sm:px-8">
+          <div className="mx-auto max-w-6xl min-w-0 px-4 sm:px-8">
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.1 }}
               variants={stagger}
-              className="max-w-2xl"
+              className="max-w-2xl min-w-0"
             >
               <motion.p
                 variants={fadeInUp}
-                className="text-sm font-semibold uppercase tracking-[0.18em] text-[#303a7e]"
+                className="text-xs font-semibold uppercase tracking-[0.14em] text-[#303a7e] sm:text-sm sm:tracking-[0.18em]"
               >
                 What we implement
               </motion.p>
               <motion.h2
                 variants={fadeInUp}
-                className="mt-3 text-3xl font-semibold tracking-tight text-[#1a2148] sm:text-4xl"
+                className="mt-3 text-2xl font-semibold tracking-tight text-[#1a2148] sm:text-4xl"
               >
                 SAP services
               </motion.h2>
               <motion.p
                 variants={fadeInUp}
-                className="mt-4 text-lg leading-relaxed text-slate-700"
+                className="mt-4 text-base leading-relaxed text-slate-700 sm:text-lg"
               >
                 Banking platforms, finance transformation, and custom SAP work —
                 each described in plain language, with the modules we cover
@@ -360,7 +367,7 @@ export const LandingPage = (): JSX.Element => {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.15 }}
+              viewport={{ once: true, amount: 0.1 }}
               variants={stagger}
               className="mt-10 grid gap-5 md:grid-cols-2"
             >
@@ -370,14 +377,14 @@ export const LandingPage = (): JSX.Element => {
                   <motion.article
                     key={service.title}
                     variants={fadeInUp}
-                    className="rounded-2xl border border-slate-200 bg-[#f7f8fc] p-6 transition-shadow hover:shadow-md"
+                    className="min-w-0 rounded-2xl border border-slate-200 bg-[#f7f8fc] p-5 transition-shadow hover:shadow-md sm:p-6"
                   >
-                    <div className="flex items-start gap-4">
+                    <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
                       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#303a7e] text-white">
                         <Icon className="h-5 w-5" aria-hidden="true" />
                       </span>
-                      <div>
-                        <h3 className="text-xl font-semibold text-[#1a2148]">
+                      <div className="min-w-0">
+                        <h3 className="text-pretty text-lg font-semibold text-[#1a2148] sm:text-xl">
                           {service.title}
                         </h3>
                         <p className="mt-2 text-[15px] leading-relaxed text-slate-700">
@@ -389,10 +396,10 @@ export const LandingPage = (): JSX.Element => {
                       {service.items.map((item) => (
                         <li
                           key={item}
-                          className="flex gap-2 text-sm text-slate-700"
+                          className="flex gap-2 break-words text-sm leading-snug text-slate-700"
                         >
                           <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#303a7e]" />
-                          {item}
+                          <span className="min-w-0">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -404,7 +411,7 @@ export const LandingPage = (): JSX.Element => {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.15 }}
+              viewport={{ once: true, amount: 0.1 }}
               variants={stagger}
               className="mt-5 grid gap-5 md:grid-cols-3"
             >
@@ -414,12 +421,12 @@ export const LandingPage = (): JSX.Element => {
                   <motion.article
                     key={service.title}
                     variants={fadeInUp}
-                    className="rounded-2xl border border-slate-200 bg-[#f7f8fc] p-6 transition-shadow hover:shadow-md"
+                    className="min-w-0 rounded-2xl border border-slate-200 bg-[#f7f8fc] p-5 transition-shadow hover:shadow-md sm:p-6"
                   >
                     <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#303a7e] text-white">
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </span>
-                    <h3 className="mt-4 text-lg font-semibold text-[#1a2148]">
+                    <h3 className="mt-4 text-pretty text-lg font-semibold text-[#1a2148]">
                       {service.title}
                     </h3>
                     <p className="mt-2 text-[15px] leading-relaxed text-slate-700">
@@ -429,10 +436,10 @@ export const LandingPage = (): JSX.Element => {
                       {service.items.map((item) => (
                         <li
                           key={item}
-                          className="flex gap-2 text-sm text-slate-700"
+                          className="flex gap-2 break-words text-sm leading-snug text-slate-700"
                         >
                           <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#303a7e]" />
-                          {item}
+                          <span className="min-w-0">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -445,44 +452,45 @@ export const LandingPage = (): JSX.Element => {
 
         <section
           id="sap-ams"
-          className="scroll-mt-[72px] bg-[#eef1f8] py-16 sm:py-20"
+          className="scroll-mt-16 bg-[#eef1f8] py-12 sm:scroll-mt-[72px] sm:py-20"
         >
-          <div className="mx-auto max-w-6xl px-5 sm:px-8">
-            <div className="grid items-start gap-10 lg:grid-cols-[1fr_0.85fr]">
+          <div className="mx-auto max-w-6xl min-w-0 px-4 sm:px-8">
+            <div className="grid min-w-0 items-start gap-10 lg:grid-cols-[1fr_0.85fr]">
               <motion.div
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
+                viewport={{ once: true, amount: 0.1 }}
                 variants={stagger}
+                className="min-w-0"
               >
                 <motion.p
                   variants={fadeInUp}
-                  className="text-sm font-semibold uppercase tracking-[0.18em] text-[#303a7e]"
+                  className="text-xs font-semibold uppercase tracking-[0.14em] text-[#303a7e] sm:text-sm sm:tracking-[0.18em]"
                 >
                   After go-live
                 </motion.p>
                 <motion.h2
                   variants={fadeInUp}
-                  className="mt-3 text-3xl font-semibold tracking-tight text-[#1a2148] sm:text-4xl"
+                  className="mt-3 text-2xl font-semibold tracking-tight text-[#1a2148] sm:text-4xl"
                 >
                   SAP application management
                 </motion.h2>
                 <motion.p
                   variants={fadeInUp}
-                  className="mt-4 max-w-xl text-lg leading-relaxed text-slate-700"
+                  className="mt-4 max-w-xl text-base leading-relaxed text-slate-700 sm:text-lg"
                 >
                   We keep production SAP stable and staffed: help desk, Basis,
                   and extra specialists when your internal team needs capacity.
                 </motion.p>
 
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                <div className="mt-8 grid gap-4 md:grid-cols-2">
                   {amsServices.map((service) => {
                     const Icon = service.icon;
                     return (
                       <motion.article
                         key={service.title}
                         variants={fadeInUp}
-                        className="rounded-xl border border-[#303a7e]/10 bg-white p-5"
+                        className="min-w-0 rounded-xl border border-[#303a7e]/10 bg-white p-5"
                       >
                         <Icon
                           className="h-5 w-5 text-[#303a7e]"
@@ -505,7 +513,7 @@ export const LandingPage = (): JSX.Element => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="w-full rounded-2xl object-cover shadow-lg shadow-[#303a7e]/10 lg:sticky lg:top-28"
+                className="hidden w-full min-w-0 rounded-2xl object-cover shadow-lg shadow-[#303a7e]/10 lg:sticky lg:top-28 lg:block"
                 alt="SAP support and application management"
                 src="/figmaAssets/image-6.png"
               />
@@ -515,26 +523,26 @@ export const LandingPage = (): JSX.Element => {
 
         <section
           id="contact"
-          className="scroll-mt-[72px] bg-[#303a7e] py-16 sm:py-20"
+          className="scroll-mt-16 bg-[#303a7e] py-12 sm:scroll-mt-[72px] sm:py-20"
         >
-          <div className="mx-auto grid max-w-6xl gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
+          <div className="mx-auto grid max-w-6xl min-w-0 gap-8 px-4 sm:gap-10 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/70 sm:text-sm sm:tracking-[0.18em]">
                 Next step
               </p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h2 className="mt-3 text-balance text-2xl font-semibold tracking-tight text-white sm:text-4xl">
                 Talk with us about your SAP landscape
               </h2>
-              <p className="mt-4 max-w-xl text-lg leading-relaxed text-white/80">
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
                 Implementations, S/4HANA moves, or ongoing AMS — email or call
                 and we will follow up with next steps.
               </p>
             </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
               <Button
                 asChild
-                className="h-14 rounded-lg bg-white px-8 text-lg font-semibold text-[#303a7e] shadow-none hover:bg-blue-50"
+                className="h-12 w-full rounded-lg bg-white px-8 text-base font-semibold text-[#303a7e] shadow-none hover:bg-blue-50 sm:h-14 sm:w-auto sm:text-lg"
               >
                 <a href="mailto:vasu@raarv.ca" aria-label="Email Raarv Inc">
                   Email
@@ -543,7 +551,7 @@ export const LandingPage = (): JSX.Element => {
               <Button
                 asChild
                 variant="outline"
-                className="h-14 rounded-lg border-white/30 bg-white/10 px-8 text-lg font-semibold text-white hover:bg-white/15 hover:text-white"
+                className="h-12 w-full rounded-lg border-white/30 bg-white/10 px-8 text-base font-semibold text-white hover:bg-white/15 hover:text-white sm:h-14 sm:w-auto sm:text-lg"
               >
                 <a href="tel:+14165778708" aria-label="Call Raarv Inc">
                   Phone
@@ -554,9 +562,9 @@ export const LandingPage = (): JSX.Element => {
         </section>
       </main>
 
-      <footer className="border-t border-white/10 bg-[#252d64] py-6">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 text-sm text-white/70 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-          <p>
+      <footer className="border-t border-white/10 bg-[#252d64] py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 text-xs leading-relaxed text-white/70 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:text-sm">
+          <p className="break-words">
             © {new Date().getFullYear()} Raarv Inc. (1001162638 ONTARIO INC).
             Consulting revamped.
           </p>
